@@ -2354,6 +2354,7 @@ PopupMenu dm::DMContent::create_popup_menu()
 	image.addItem("jump..."																										, std::function<void()>( [&]{ show_jump_wnd();				} ));
 	image.addSeparator();
 	image.addItem("move empty images..."																						, std::function<void()>( [&]{ move_empty_images();			} ));
+	image.addItem("move non-annotated images..."																				, std::function<void()>( [&]{ move_non_annotated_images();	} ));
 	image.addItem("re-load and re-save every image"																				, std::function<void()>( [&]{ reload_resave_every_image();	} ));
 	image.addSeparator();
 	image.addItem("flip images..."																								, std::function<void()>( [&]{ flip_images();				} ));
@@ -2659,6 +2660,25 @@ dm::DMContent & dm::DMContent::move_empty_images()
 	if (result != 0)
 	{
 		DMContentMoveEmptyImages helper(*this);
+		helper.runThread();
+	}
+
+	return *this;
+}
+
+
+dm::DMContent & dm::DMContent::move_non_annotated_images()
+{
+	const int result = AlertWindow::showOkCancelBox(AlertWindow::QuestionIcon, "DarkMark",
+		"This will move non-annotated images into a subdirectory named \"non-annotated_images\". This has zero impact on "
+		"how the neural network is trained. The length of time to train won't change, and the effectiveness of the neural "
+		"network will be exactly the same. The only real purpose is to help people organize their images for review.\n"
+		"\n"
+		"Do you wish to move all non-annotated images into a folder called \"non-annotated_images\"?");
+
+	if (result != 0)
+	{
+		DMContentMoveNonAnnotatedImages helper(*this);
 		helper.runThread();
 	}
 

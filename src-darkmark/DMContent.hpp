@@ -132,6 +132,8 @@ namespace dm
 
 			DMContent & move_empty_images();
 
+			DMContent & move_non_annotated_images();
+
 			DMContent & reload_resave_every_image();
 
 			DMContent & show_jump_wnd();
